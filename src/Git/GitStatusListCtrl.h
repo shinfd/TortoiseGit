@@ -811,11 +811,13 @@ private:
 	DWORD						m_dwShow;
 	bool						m_bShowFolders;
 	bool						m_bShowIgnores;
+	bool						m_bHideTooLarge;
 	bool						m_bUpdate;
 	unsigned __int64			m_dwContextMenus;
 	bool						m_bBusy;
 	bool						m_bWaitCursor;
 	bool						m_bEmpty;
+	bool						m_bTooLarge;
 	bool						m_bIgnoreRemoveOnly;
 	bool						m_bCheckIfGroupsExist;
 	bool						m_bFileDropsEnabled;
@@ -831,6 +833,9 @@ private:
 
 	CString						m_sEmpty;
 	CString						m_sBusy;
+	CString						m_sTooLarge;
+
+	LONG						m_nTooLargeThreshold;
 
 	bool						m_bCheckChildrenWithParent;
 	std::unique_ptr<CGitStatusListCtrlDropTarget> m_pDropTarget;

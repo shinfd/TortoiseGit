@@ -224,7 +224,9 @@ CGitStatusListCtrl::CGitStatusListCtrl() : CResizableColumnsListCtrl<CListCtrl>(
 	, m_bBusy(false)
 	, m_bWaitCursor(false)
 	, m_bEmpty(false)
+	, m_bTooLarge(false)
 	, m_bShowIgnores(false)
+	, m_bHideTooLarge(true)
 	, m_bIgnoreRemoveOnly(false)
 	, m_bCheckChildrenWithParent(false)
 	, m_bUnversionedLast(true)
@@ -275,6 +277,7 @@ CGitStatusListCtrl::CGitStatusListCtrl() : CResizableColumnsListCtrl<CListCtrl>(
 	, m_nBlockItemChangeHandler(0)
 	, m_bIncludedStaged(false)
 	, m_bEnableDblClick(true)
+	, m_nTooLargeThreshold(1000)
 {
 	m_bNoAutoselectMissing = CRegDWORD(L"Software\\TortoiseGit\\AutoselectMissingFiles", FALSE) == TRUE;
 
@@ -675,6 +678,23 @@ void CGitStatusListCtrl::Show(unsigned int dwShow, unsigned int dwCheck /*=0*/, 
 
 			AppendLFSLocks(false);
 		}
+		m_bTooLarge = (m_bHideTooLarge && m_arStatusArray.size() > m_nTooLargeThreshold);
+		if (m_bTooLarge)
+		{
+			m_arListArray.clear();
+			RemoveAllGroups();
+
+			RestoreScrollPos();
+
+			m_bWaitCursor = false;
+			m_bBusy = false;
+			m_bEmpty = (GetItemCount() == 0);
+			Invalidate();
+
+			BuildStatistics();
+			return;
+		}
+
 		PrepareGroups();
 		m_arListArray.clear();
 		m_arListArray.reserve(m_arStatusArray.size());
@@ -3564,7 +3584,7 @@ void CGitStatusListCtrl::PreSubclassWindow()
 void CGitStatusListCtrl::OnPaint()
 {
 	LRESULT defres = Default();
-	if ((m_bBusy) || (m_bEmpty))
+	if ((m_bBusy) || (m_bEmpty) || (m_bTooLarge))
 	{
 		CString str;
 		if (m_bBusy)
@@ -3573,6 +3593,14 @@ void CGitStatusListCtrl::OnPaint()
 				str.LoadString(IDS_STATUSLIST_BUSYMSG);
 			else
 				str = m_sBusy;
+		}
+		else if (m_bTooLarge)
+		{
+			if (m_sTooLarge.IsEmpty())
+				str = "Too many files to display";
+				// str.LoadString(IDS_STATUSLIST_TOOLARGE);
+			else
+				str = m_sTooLarge;
 		}
 		else
 		{
