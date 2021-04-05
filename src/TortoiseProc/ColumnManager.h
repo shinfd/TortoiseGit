@@ -56,6 +56,7 @@ public:
 	int GetColumnByName(int nameId) const;
 	int SetNames(UINT* buff, int size);
 	int GetWidth(int column, bool useDefaults = false) const;
+	int GetWidthForItemRange(int column, int rangeFrom, int rangeSize, bool useDefaults) const;
 	int GetVisibleWidth(int column, bool useDefaults) const;
 	void SetRightAlign(int column) const;
 

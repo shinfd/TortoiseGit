@@ -284,6 +284,32 @@ int ColumnManager::GetWidth(int column, bool useDefaults) const
 	return width;
 }
 
+int ColumnManager::GetWidthForItemRange(int column, int rangeFrom, int rangeSize, bool useDefaults) const
+{
+	size_t index = static_cast<size_t>(column);
+	assert(columns.size() > index);
+
+	int width = columns[index].width;
+	if ((width == 0) && useDefaults)
+	{
+		if (index > 0)
+		{
+			int cx = control->GetStringWidth(GetName(column)) + 20; // 20 pixels for col separator and margin
+
+			for (int i = rangeFrom, itemEnd = rangeFrom + rangeSize; i < itemEnd; ++i)
+			{
+				// get the width of the string and add 14 pixels for the column separator and margins
+				int linewidth = control->GetStringWidth(control->GetItemText(i, column)) + 14;
+				if (cx < linewidth)
+					cx = linewidth;
+			}
+			return cx;
+		}
+		return LVSCW_AUTOSIZE_USEHEADER;
+	}
+	return width;
+}
+
 int ColumnManager::GetVisibleWidth(int column, bool useDefaults) const
 {
 	return IsVisible(column) ? GetWidth(column, useDefaults) : 0;
