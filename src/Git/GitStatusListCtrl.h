@@ -655,6 +655,9 @@ public:
 		SetExtendedStyle(exStyle);
 	}
 
+	void SetHideTooLarge(bool b) { m_bHideTooLarge = b; Invalidate(); }
+	void SetHideTooLargeThreshold(int threshold) { m_nTooLargeThreshold = threshold; Invalidate(); }
+
 private:
 	CString GetCellText(int listIndex, int column);    ///< get the text for a certain grid cell
 	//void AddEntry(FileEntry * entry, WORD langID, int listIndex);	///< add an entry to the control

@@ -226,7 +226,7 @@ CGitStatusListCtrl::CGitStatusListCtrl() : CResizableColumnsListCtrl<CListCtrl>(
 	, m_bEmpty(false)
 	, m_bTooLarge(false)
 	, m_bShowIgnores(false)
-	, m_bHideTooLarge(true)
+	, m_bHideTooLarge(false)
 	, m_bIgnoreRemoveOnly(false)
 	, m_bCheckChildrenWithParent(false)
 	, m_bUnversionedLast(true)
