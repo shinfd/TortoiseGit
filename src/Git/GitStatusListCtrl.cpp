@@ -719,7 +719,7 @@ void CGitStatusListCtrl::Show(unsigned int dwShow, unsigned int dwCheck /*=0*/, 
 		}
 	}
 
-	AdjustColumnWidths();
+	AdjustColumnWidths(false);
 
 	SetRedraw(TRUE);
 	GetStatisticsString();
@@ -835,7 +835,7 @@ void CGitStatusListCtrl::Show(unsigned int dwShow, unsigned int dwCheck /*=0*/, 
 
 	m_ColumnManager.UpdateRelevance (m_arStatusArray, m_arListArray);
 
-	AdjustColumnWidths();
+	AdjustColumnWidths(false);
 
 	SetRedraw(TRUE);
 	GetStatisticsString();

@@ -1,4 +1,4 @@
-// TortoiseGit - a Windows shell extension for easy version control
+﻿// TortoiseGit - a Windows shell extension for easy version control
 
 // Copyright (C) 2016 - TortoiseGit
 
@@ -102,14 +102,16 @@ public:
 		m_ContextMenuHandler = pContextMenuHandler;
 	}
 
-	void AdjustColumnWidths()
+	void AdjustColumnWidths(bool useEntireList = true)
 	{
 		auto header = GetHeaderCtrl();
 		if (!header)
 			return;
 		int maxcol = header->GetItemCount() - 1;
+		int itemStart = useEntireList ? 0 : GetTopIndex();
+		int itemCount = useEntireList ? GetItemCount() : GetCountPerPage();
 		for (int col = 0; col <= maxcol; col++)
-			SetColumnWidth(col, m_ColumnManager.GetWidth(col, true));
+			SetColumnWidth(col, m_ColumnManager.GetWidthForItemRange(col, itemStart, itemCount, true));
 	}
 	virtual void SaveColumnWidths()
 	{
